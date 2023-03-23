@@ -152,8 +152,8 @@ impl<M: Middleware> Pair<M> {
 
         match (sync_tokens, sync_reserves) {
             (true, true) => {
-                let tokens = parse_tokens_result(result[0..2].to_vec())?;
-                let reserves = parse_reserves_result(result[2..].to_vec())?;
+                let tokens = parse_tokens_result(result[0..2].to_vec().into_iter().flatten().collect())?;
+                let reserves = parse_reserves_result(result[2..].to_vec().into_iter().flatten().collect())?;
 
                 if tokens.is_none() || reserves.is_none() {
                     self.tokens = None;
@@ -166,7 +166,7 @@ impl<M: Middleware> Pair<M> {
                 self.reserves = reserves;
             }
             (true, false) => {
-                let tokens = parse_tokens_result(result)?;
+                let tokens = parse_tokens_result(result.to_vec().into_iter().flatten().collect())?;
 
                 if tokens.is_none() {
                     self.tokens = None;
@@ -178,7 +178,7 @@ impl<M: Middleware> Pair<M> {
                 self.tokens = tokens;
             }
             (false, true) => {
-                let reserves = parse_reserves_result(result)?;
+                let reserves = parse_reserves_result(result.to_vec().into_iter().flatten().collect())?;
 
                 if reserves.is_none() {
                     self.tokens = None;

@@ -98,16 +98,17 @@ impl Library {
             multicall.add_call(call, false);
         }
 
-        multicall
+        Ok(multicall
             .call_raw()
             .await?
             .into_iter()
             .zip(sorted)
-            .map(|(token, sort)| {
-                let (a, b): (U256, U256) = Tokenizable::from_token(token)?;
-                Ok(if sort { (b, a) } else { (a, b) })
+            .filter_map(|(token, sort)| {
+                let token = token.ok()?;
+                let (a, b): (U256, U256) = Tokenizable::from_token(token).ok()?;
+                if sort { Some((b, a)) } else { Some((a, b)) }
             })
-            .collect()
+            .collect())
     }
 
     /// Given some amount of an asset and pair reserves, returns an equivalent amount of the other

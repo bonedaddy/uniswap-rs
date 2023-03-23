@@ -1,5 +1,5 @@
 use ethers::prelude::*;
-use std::sync::Arc;
+use std::{sync::Arc, borrow::Borrow};
 use uniswap_rs::{
     constants::NATIVE_ADDRESS, contracts::addresses::address, Amount, Dex, ProtocolType,
 };

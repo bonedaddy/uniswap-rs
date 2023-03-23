@@ -103,7 +103,7 @@ impl<M: Middleware> Erc20<M> {
         #[allow(clippy::single_match)]
         match multicall.call_raw().await {
             Ok(tokens) => {
-                let mut tokens = tokens.into_iter();
+                let mut tokens = tokens.into_iter().flatten();
                 macro_rules! assign_if_ok {
                     ($($var:ident)+) => {$(
                         if let Some(token) = tokens.next() {
